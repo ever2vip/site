@@ -7,15 +7,36 @@ const methodOverride = require('method-override');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const csrf = require('csurf');
+const mongoose = require('mongoose'); // تم استيراد موديل مونغوس مباشرة هنا
 const connectDB = require('./config/db');
 const viewLocals = require('./middleware/viewLocals');
 
 const app = express();
 
-connectDB().catch(err => {
-  console.error(err);
-  process.exit(1);
-});
+// دالة لتشغيل الـ Seed تلقائياً إذا كانت قاعدة البيانات فارغة
+async function autoSeed() {
+  try {
+    // التحقق من وجود ملف الـ seed في المجلد الرئيسي أو مجلد البذور
+    const seedDatabase = require('./seed'); 
+    if (typeof seedDatabase === 'function') {
+      await seedDatabase();
+      console.log('Database checked/seeded successfully! 🎉');
+    }
+  } catch (err) {
+    console.log('Auto-seeding skipped or files already present:', err.message);
+  }
+}
+
+// الاتصال بقاعدة البيانات وتشغيل السيرفر بعد النجاح
+connectDB()
+  .then(async () => {
+    console.log('Connected to MongoDB successfully.');
+    await autoSeed(); // تشغيل التغذية التلقائية هنا
+  })
+  .catch(err => {
+    console.error('Database connection failed:', err);
+    process.exit(1);
+  });
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -33,7 +54,9 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'dev-secret-change-me',
   resave: false,
   saveUninitialized: false,
-  store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
+  store: MongoStore.create({ 
+    mongoUrl: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/pleasure-club' 
+  }),
   cookie: {
     httpOnly: true,
     sameSite: 'lax',
@@ -54,5 +77,6 @@ app.use((err, req, res, next) => {
   res.status(500).render('pages/500', { title: 'Server Error', content: {}, settings: {}, error: err.message });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Pleasure Private Club running on http://localhost:${PORT}`));
+// تعيين المنفذ ليتوافق مع منصة Render تلقائياً
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`Pleasure Private Club running on port ${PORT}`));
