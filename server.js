@@ -27,15 +27,15 @@ async function autoSeed() {
   }
 }
 
-// الاتصال بقاعدة البيانات وتشغيل السيرفر بعد النجاح
+// الاتصال الآمن والمقاوم للانهيار بقاعدة البيانات
 connectDB()
   .then(async () => {
-    console.log('Connected to MongoDB successfully.');
-    await autoSeed(); // تشغيل التغذية التلقائية هنا
+    console.log('Connected to MongoDB successfully! 🎉');
+    await autoSeed();
   })
   .catch(err => {
-    console.error('Database connection failed:', err);
-    process.exit(1);
+    // تم تعديل هذا الجزء لكي لا يغلق السيرفر (حذفنا process.exit) ليخبرنا بالخطأ الحقيقي
+    console.error('CRITICAL: Database connection failed:', err.message);
   });
 
 app.set('view engine', 'ejs');
