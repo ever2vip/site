@@ -7,11 +7,19 @@ const methodOverride = require('method-override');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const csrf = require('csurf');
-const mongoose = require('mongoose'); // تم استيراد موديل مونغوس مباشرة هنا
 const connectDB = require('./config/db');
 const viewLocals = require('./middleware/viewLocals');
 
 const app = express();
+
+// اتصال مباشر ونظيف بدون استهلاك للذاكرة في الـ Seeding
+connectDB()
+  .then(() => {
+    console.log('Connected to MongoDB successfully. 🚀');
+  })
+  .catch(err => {
+    console.error('Database connection failed:', err.message);
+  });
 
 // دالة لتشغيل الـ Seed تلقائياً إذا كانت قاعدة البيانات فارغة
 async function autoSeed() {
