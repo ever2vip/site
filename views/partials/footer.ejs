@@ -1,0 +1,11 @@
+<footer class="bg-black py-14">
+  <div class="mx-auto grid max-w-7xl gap-10 px-5 lg:grid-cols-5 lg:px-8">
+    <div><a href="/" class="flex items-center gap-3"><%- include('logo') %></a><p class="mt-6 text-sm leading-7 text-clubMuted"><%= content.footer_description || 'An exclusive world of luxury, passion, and extraordinary experiences.' %></p></div>
+    <div><h4 class="mb-5 text-xs uppercase tracking-[0.22em]">Quick Links</h4><ul class="space-y-3 text-sm text-clubMuted"><li><a href="/">Home</a></li><li><a href="/events">Events</a></li><li><a href="/membership">Membership</a></li><li><a href="/gallery">Gallery</a></li><li><a href="/contact">Contact</a></li></ul></div>
+    <div><h4 class="mb-5 text-xs uppercase tracking-[0.22em]">Membership</h4><ul class="space-y-3 text-sm text-clubMuted"><li><a href="/membership">Packages</a></li><li><a href="/membership">Benefits</a></li><li><a href="/membership#application">Apply Now</a></li></ul></div>
+    <div><h4 class="mb-5 text-xs uppercase tracking-[0.22em]">Contact</h4><ul class="space-y-3 text-sm text-clubMuted"><li><%= content.contact_email || 'info@pleasureclub.com' %></li><li><%= content.contact_phone || '+971 50 123 4567' %></li><li><%= content.contact_location || 'Dubai, UAE' %></li></ul><div class="mt-6 flex gap-5 text-lg"><a href="#">◎</a><a href="#">f</a><a href="#">x</a></div></div>
+    <div><h4 class="mb-5 text-xs uppercase tracking-[0.22em]">Newsletter</h4><form action="/subscribe" method="POST" class="flex overflow-hidden rounded-full border border-white/10 bg-white/5 p-1"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="source" value="footer"><input name="email" type="email" required placeholder="Enter your email" class="min-h-12 flex-1 bg-transparent px-5 text-xs outline-none placeholder:text-white/30"><button class="h-12 w-12 rounded-full bg-clubRed text-xl">→</button></form><p class="mt-8 text-xs text-clubMuted">© 2025 Pleasure Private Club.</p><p class="mt-2 text-xs text-clubMuted">All rights reserved.</p></div>
+  </div>
+</footer>
+<script src="/js/site.js"></script>
+</body></html>
